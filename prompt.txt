@@ -1,0 +1,182 @@
+Okay so the thing is this - 
+
+
+I have this file:
+
+import pandas as pd
+from openai import OpenAI
+import os
+
+client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+
+# Reading an Excel file
+df = pd.read_csv('empty.csv')
+
+df.head()
+
+
+
+that has feilds such as this:
+
+founder,location,UG degree,UG school,g year,G degree,G school,g year,prof summary,early career,mid career,late career,key achievements,selected company,motivation,vision/mission,personal input,sources
+Kunal Agarwal,"Palo Alto, California, United States",BS in Computer & Electrical Engineering,Valparaiso University,"2,007",MBA,Duke University,"2,012",,,,,,Unravel Data,,,,
+David Aktary,"Austin, Texas, United States",BS in Computer Science,University of Michigan - Dearborn,"2,003",MBA,Duke University,"2,007",,,,,,ERC dEX,,,,
+
+
+
+
+what I want to do is the following, for each person I want to generate professional summaries for them, this is an example of how I have done i for a few:
+
+founder,location,UG degree,UG school,g year,G degree,G school,g year,prof summary,early career,mid career,late career,key achievements,selected company,motivation,vision/mission,personal input,sources
+Kunal Agarwal,"Palo Alto, California, United States",BS in Computer & Electrical Engineering,Valparaiso University,2007,MBA,Duke University,2012,"Kunal Agarwal is a seasoned entrepreneur and technology leader, currently serving as the Co-founder and CEO of Unravel Data. He has 15 years of experience in the computer software industry and his career trajectory, spanning roles in sales, implementation, and entrepreneurship, reflects a consistent focus on big data and cloud technologies.","He began his professional journey in 2006 as a Grid Computing Specialist at Sun Microsystems, where he helped run their Grid Computing Engine. Following this, Agarwal transitioned to a role as a Business Intelligence Consultant at Express Scripts, futuring his work in the field. These industry roles sufficiently laid the groundwork for his future endeavors.","His career progression led him to eOne Infotech, where he served as a Sales Director from 2007-2014, leading sales and implementation of Oracle products for several Fortune 100 organizations. From there, he co-founded Yuuze.com, a fashion networking website, giving personalized recommendations on what-to-wear; it was this endeavor that solidified his passion for entrepreneurship.","In 2013, Agarwal's professional journey culminated in the co-founding of Unravel Data Systems alongside Shivnath Babu. As CEO, he has steered the company's growth from a small team to a global operation, focusing on leveraging AI to streamline data operations for large enterprises, now used by numerous Fortune 100 companies.","Unravel Data has raised over $67 million in funding from prominent investors like Menlo Ventures, GGV Capital, and Microsoft's M12 Ventures; Recognized as a Gartner Cool Vendor in Performance Analysis for 2019; Holds patents related to data performance management and optimization techniques",Unravel Data,"Kunal Agarwal's journey to founding Unravel Data was inspired by his firsthand experience with the complexities of managing cloud data operations. During his time in various tech roles, he identified a significant gap in the market for tools that could streamline these processes effectively, especially highlighted by increasing adoption of cloud technologies and the growing volumes of data being processed by enterprises.","At its core, Unravel Data aims to simplify data operations and modernization through AI-driven solutions. The company strives to position itself as the definitive platform for optimizing modern data pipelines and facilitating cloud migrations, catering to the needs of data professionals across industries.","Agarwal's perspective on the evolution of data workloads underscores Unravel's mission: ""We've gone from a place where these data workloads are experimental to now these data workloads running the business. And when you're doing that, you need to make sure that everything is running properly."" And so, he loves ""watching the team go from strength to strength in the unselfish pursuit of a shared vision.""","https://www.atscale.com/podcast/data-observability-with-kunal-agarwal/, https://councils.forbes.com/profile/Kunal-Agarwal-Chief-Excecutive-Officer-Unravel-Data/94c2fe1a-a2de-468f-90a1-46faf9890a4e"
+David Aktary,"Austin, Texas, United States",BS in Computer Science,University of Michigan - Dearborn,2003,MBA,Duke University,2007,"David Aktary is a seasoned entrepreneur and technologist with over 25 years of experience in the tech industry. He was the CEO and Founder of ERC dEX, a decentralized crypto exchange, and has co-founded multiple startups including onBrief, AktaryTech, and Keccak Capital. His experiences spans software development, venture capital, investment banking, and blockchain technology.","After a stint at Michigan State University, Aktary began his career in tech in 1996 at a small ISP in central Michigan. Shortly after, he spent six years at IBM as a web developer, project manager, and business development manager, consulting for major clients like Ford, Chrysler, and the US Postal Service., before returning to school for his MBA.","As a result of his MBA studies, Aktary made a slight career pivot, interning in venture capital and as a tech, media, and telecom investment banker for JPMorgan. Following such, and after spending some time in industry, Aktary made an even bigger pivot into entrepreneurship, founding his own company, AktaryTech, centered around building blockchain solutions and adivising other early-stage startups in the space.","He has since pivoted his focus fully towards blockchain and cryptocurrency technologies, co-founding multiple startups, including onBrief (a marketing tech SaaS), ERC dEX (a non-custodial blockchain trading platform), and Keccak Capital (a crypto hedge fund). Of the three, his ethos was best reflected in ERC dEX, where he grew trading volume to ~1M in less than 10 months, with an ambitious goal to be the first global, non-custodial trading platform for crypto.",Selected as a mentor for SXSW 2024; Former USC Lacrosse Head Coach ,ERC dEX,"David Aktary founded ERC dEX driven by his desire to address the critical issue of liquidity fragmentation in decentralized exchanges, which he saw as a major barrier to widespread adoption of cryptocurrency trading. Hence, his conviction stemmed from the belief that a well-designed decentralized exchange could bridge the gap between traditional finance and the emerging world of decentralized trading, ultimately democratizing access to the token economy.","ERC dEX's mission was to onboard the world to the token economy by providing a compliant, user-friendly, and liquidity-rich platform for trading ERC20 tokens. The company aimed to stand out in the market by implementing innovative features like the Aqueduct liquidity network and focusing on regulatory compliance to ensure long-term sustainability.","""My expertise lies in identifying industries ripe for disruption,"" Aktary states. Fittingly, he envisioned ERC dEX as a catalyst for the widespread adoption of decentralized finance: ""The level of loss unsuspecting investors .""",https://medium.com/tokendaily/david-aktary-founder-erc-dex-b1cdf722486e 
+David Albert,"Santa Monica, California, United States",AB in Government,Harvard University,1977,MD,Duke University,1983,"Dr. David Albert is the Founder and Chief Medical Officer of AliveCor Inc., a leading company in the medical device industry. With over 30 years of experience in cardiology and medical device innovation, he has been instrumental in developing innovative cardiac diagnostic tools.","After graduating Medical School, he patented his first invention, a wrist-based pulse monitor. He then founded Corazonix Corp, which developed and commercialized a high-resolution ECG based on a personal computer (sold to Arrhythmia Research Technology in 1990)","Following Corazonix, Dr. Albert founded Data Critical Corp, which pioneered wireless ECG technology. It went public in 1999 and was acquired by GE Healthcare in 2001. Dr. Albert then served as Chief Scientist of GE Cardiology until 2004.","Dr. Albert left GE to found InnovAlarm and Lifetone Technology, focusing on developing products to save lives of people with hearing loss during fire emergencies. In 2011, he founded AliveCor, focusing on consumer-oriented personal ECG devices.","Has published over 100 abstracts and journal articles in cardiovascular literature; Holds 60 issued US patents, with 25 pending, including a system for comparing EKG data using ML algorithms (Patent#12097035), methods for monitoring blood pressure using mobile devices (Patent #11980451), & systems for cardiac monitoring and detecting arrhythmias (Patent #11903681)  ",AliveCor,"Dr. Albert had been nurturing the idea of a personal ECG device since the 1990s, driven by his vision to democratize cardiac care. The advent of smartphones in the late 2000s made this vision technologically feasible. In December 2010, he uploaded a YouTube video demonstrating a prototype iPhone ECG, which went viral and attracted significant attention from venture capitalists and industry partners. The overwhelming response served as the final catalyst for Dr. Albert to found AliveCor in 2011. Now, AliveCor has served millions of users, capturing over a million ECGs weekly and accumulating more than 190 million ECGs in total","AliveCor aims to transform cardiac care by providing innovative, AI-driven ECG solutions that empower individuals and healthcare providers to manage heart health proactively. The company's mission is to integrate advanced technology into everyday health practices, improving accessibility and outcomes in cardiac care. ","Dr. Albert has ""always believed that technology should enhance lives, not complicate them."" So, given his clinical experience, he applies his ""unique understanding of the potential for technology to alleviate doctors’ workloads and enhance partnership between patients and their care teams"" to ""oversee the creation and clinical validation of user-centric tools that patients."" He lives by the mantra, ""saving lives, one invention at a time,"" which he feels embodies the proactive mindset that is necessary to drive meaningful change. ",https://medium.com/authority-magazine/femtech-dr-david-e-albert-of-alivecor-on-how-their-technology-is-revolutionizing-womens-health-879ec073c60c 
+Ethan Anderson,"Los Angeles, California, United States","BA in Economics, Public Policy, MMS",Duke University,1998,MBA,Harvard University,2003,"Ethan Anderson is a Silicon Valley entrepreneur, founder and CEO of MyTime, and previously co-founder and CEO of Redbeacon. He has experience in product management at Google and has worked in internet strategy and marketing roles at various companies.","He began at McKinsey & Company, where he worked for approximately 1.5 years on technology projects. After which, Anderson embarked on his first entrepreneurial venture by founding QuickReturns (discontinued after internet bubble burst).","After his initial entrepreneurial attempt, Anderson transitioned to more established roles in the tech industry. He served as the Director of Strategy & Analysis at Buy.com, before joining Google as a Product Manager. There, Anderson worked on high-profile projects including Google Video and Image Search.","Leveraging his experience from Google and his earlier entrepreneurial venture, Anderson co-founded Redbeacon in 2008, a platform connecting consumers with home service professionals (acquired by Home Depot in 2012). Following this success, Anderson founded MyTime, his current venture, which focuses on streamlining the booking process for local services.",Won Grand Prize at 2009 TechCrunch50 competition with Redbeacon; Named to Silicon Valley 100; Recognized as one of 16 Up-and-Coming Silicon Valley Entrepreneurs You Need to Meet,MyTime,"Ethan Anderson founded MyTime shortly after selling his previous company, Redbeacon, to Home Depot. The inspiration for MyTime came from Anderson's desire to build a retail experience for local services, aiming to create a marketplace that integrates scheduling, dynamic pricing, and real-time availability, focusing on fixed-price, fixed-availability services like haircuts, oil changes, and dentist appointments.","MyTime launched to consumers in 2013 with more than 500,000 appointments available for booking. The platform was designed to maximize revenue for businesses by reaching customers wherever they are at the moment they are ready to transact, while simplifying the booking process for consumers. At its core, the company's vision is to become the largest platform in the world for online scheduling and local commerce.","Anderson describes his vision for MyTime as ""to build a retail experience for shopping local services that rivals Amazon or Zappos in user experience."" He sees MyTime as potentially disruptive, aiming to serve the ""large, underserved market of 2+ million local businesses who still largely rely on pen, paper, and the telephone to manage and schedule their customers.""","https://streetfightmag.com/2013/03/13/why-redbeacon-founder-ethan-anderson-returned-to-local/, https://www.mytime.com/jobs/account_executives "
+
+
+
+
+
+
+the first thing I want to do is search for a person to get sources, so basically given a person, search for person's name location and university through duckduck go or something - this is code I had previously for instance
+
+
+import requests
+from bs4 import BeautifulSoup
+import re
+
+def duckduckgo_search(query, max_results=5):
+    search_url = "https://html.duckduckgo.com/html/"
+    params = {
+        'q': query,
+        's': '0',
+        'dc': '',
+        'vqd': '',
+        'o': 'json'
+    }
+    headers = {
+        'User-Agent': 'Mozilla/5.0'
+    }
+    response = requests.post(search_url, data={'q': query}, headers=headers)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    links = []
+    for result in soup.find_all('a', {'class': 'result__a'}, href=True):
+        links.append(result['href'])
+        if len(links) >= max_results:
+            break
+    return links
+
+def extract_text(url):
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0'
+        }
+        response = requests.get(url, headers=headers, timeout=5)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        # Remove scripts and styles
+        for script in soup(["script", "style"]):
+            script.decompose()
+        text = soup.get_text(separator=' ', strip=True)
+        # Clean up the text
+        text = re.sub(r'\s+', ' ', text)
+        return text
+    except Exception:
+        return ""
+
+def get_search_text(query, max_results=5):
+    urls = duckduckgo_search(query, max_results)
+    texts = [extract_text(url) for url in urls]
+    combined_text = "\n\n".join(texts)
+    return combined_text
+
+if __name__ == "__main__":
+    user_query = input("Enter your search query: ")
+    result_text = get_search_text(user_query)
+    print(result_text)
+
+
+the problem with using this is that the reponse is often quite big so perhaps only take the first 10,000 charcthers on that page or something so that we don't waste quite a bit. 
+
+Here is what I want to do, first we will google or use open source serach engine to basically look up the person's first name last name duke university and look at the first 7 links. 
+
+Than we will use these as the prompt for a gpt which will fill out all of these feilds, prof summary,early career,mid career,late career,key achievements, motivation,vision/mission,personal input and sources. For sources, just put the first 7 links that come from teh duck duck go search. 
+
+Give me systematic code that does this for each person, we have a toatl of 161 people, we shoujld first have code that given the output from teh7 links - feeds taht into a gpt input and than uses that to create a systematic output. 
+
+BTW this is how you create a systematic output from chatgpt:
+
+from pydantic import BaseModel
+from openai import OpenAI
+
+client = OpenAI()
+
+class Step(BaseModel):
+    explanation: str
+    output: str
+
+class MathReasoning(BaseModel):
+    steps: list[Step]
+    final_answer: str
+
+completion = client.beta.chat.completions.parse(
+    model="gpt-4o-2024-08-06",
+    messages=[
+        {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
+        {"role": "user", "content": "how can I solve 8x + 7 = -23"}
+    ],
+    response_format=MathReasoning,
+)
+
+math_reasoning = completion.choices[0].message.parsed
+
+this is the example reponse:
+
+{
+  "steps": [
+    {
+      "explanation": "Start with the equation 8x + 7 = -23.",
+      "output": "8x + 7 = -23"
+    },
+    {
+      "explanation": "Subtract 7 from both sides to isolate the term with the variable.",
+      "output": "8x = -23 - 7"
+    },
+    {
+      "explanation": "Simplify the right side of the equation.",
+      "output": "8x = -30"
+    },
+    {
+      "explanation": "Divide both sides by 8 to solve for x.",
+      "output": "x = -30 / 8"
+    },
+    {
+      "explanation": "Simplify the fraction.",
+      "output": "x = -15 / 4"
+    }
+  ],
+  "final_answer": "x = -15 / 4"
+}
+
+
+I want you to craet such a structured out put and make sure that your code runs fully. I am in juipternotebook so breakdown each code into secitons and tahn we can run each section step by step. Make sure that your code runs and follows the updated openai api format - tehy changed their api quite a bit, now you have to do this: client.chat.completions.create() so do that please. Make sure the CSV updated is populated correctly and nicely. 
+
+
+
+
+
+
+'Kunal Agarwal is an innovative entrepreneur and technology leader, serving as the CEO and co-founder of Unravel Data, a company focused on DataOps observability. With a background in business intelligence and product development, he has successfully led Unravel to enhance data team efficiency and insight.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Kunal Agarwal began his career by leading sales and implementation for Oracle products at Fortune 100 organizations and worked at Sun Microsystems managing its Grid Computing Engine. He later co-founded Yuuze.com, which pioneered e-commerce personalization.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'In his mid-career, Kunal Agarwal co-founded Unravel Data, where he helped advance the company's groundbreaking DataOps observability platform. He has been instrumental in scaling Unravel, capturing high-profile clients like Adobe and Deutsche Bank, and expanding its global presence.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Kunal is currently focused on furthering Unravel Data’s impact in the data tech space. As CEO, he continues to push boundaries in data observability and is a prominent speaker at industry events discussing data-driven insights and innovation.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Key achievements of Kunal Agarwal include co-founding Unravel Data, achieving CRN's recognition as one of the Coolest Cloud Companies, and receiving Gartner’s Cool Vendor accolade. He has also been a pivotal figure at major events like DataOps Unleashed, advocating data technology advancements.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Throughout his career, Kunal has been driven by a desire to empower companies to harness data more effectively, reducing operational complexity and enabling smarter business decisions through technological innovation.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Kunal Agarwal’s mission is to revolutionize data observability, making data management more accessible and actionable for data teams. His vision involves leveraging AI and machine learning to optimize data operations and enhance performance across diverse platforms.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  
+'Kunal expresses pride in fostering a collaborative and effective team at Unravel, stating that watching the team excel and pursue a shared vision is his favorite aspect of the company.' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
